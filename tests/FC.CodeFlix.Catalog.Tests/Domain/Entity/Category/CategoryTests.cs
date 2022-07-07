@@ -5,9 +5,9 @@ namespace FC.CodeFlix.Catalog.Tests.Domain.Entity.Category;
 
 public class CategoryTests
 {
-    [Fact(DisplayName = nameof(Instatiate))]
+    [Fact(DisplayName = nameof(Instantiate))]
     [Trait("Domain", "Category - Aggregates")]
-    public void Instatiate()
+    public void Instantiate()
     {
         // Arrange
         var validDate = new
@@ -20,7 +20,7 @@ public class CategoryTests
 
         // Act
         var category = new DomainEntity.Category(validDate.Name, validDate.Description);
-        var datetimeAfter = DateTime.Now;
+        var dateTimeAfter = DateTime.Now;
 
         // Assert
         Assert.NotNull(category);
@@ -29,7 +29,7 @@ public class CategoryTests
         Assert.NotEqual(default(Guid), category.Id);
         Assert.NotEqual(default(DateTime), category.CreatedAt);
         Assert.True(category.CreatedAt > dateTimeBefore);
-        Assert.True(category.CreatedAt < datetimeAfter);
+        Assert.True(category.CreatedAt < dateTimeAfter);
         Assert.True(category.IsActive);
     }
 
@@ -48,7 +48,7 @@ public class CategoryTests
         var dateTimeBefore = DateTime.Now;
 
         var category = new DomainEntity.Category(validDate.Name, validDate.Description, isActive);
-        var datetimeAfter = DateTime.Now;
+        var dateTimeAfter = DateTime.Now;
 
         Assert.NotNull(category);
         Assert.Equal(validDate.Name, category.Name);
@@ -56,8 +56,40 @@ public class CategoryTests
         Assert.NotEqual(default(Guid), category.Id);
         Assert.NotEqual(default(DateTime), category.CreatedAt);
         Assert.True(category.CreatedAt > dateTimeBefore);
-        Assert.True(category.CreatedAt < datetimeAfter);
+        Assert.True(category.CreatedAt < dateTimeAfter);
         Assert.Equal(category.IsActive, isActive);
+    }
+
+    [Fact(DisplayName = nameof(Activate))]
+    [Trait("Domain", "Category - Aggregates")]
+    public void Activate()
+    {
+        var validDate = new
+        {
+            Name = "category name",
+            Description = "category description"
+        };
+
+        var category = new DomainEntity.Category(validDate.Name, validDate.Description, false);
+        category.Activate();
+
+        Assert.True(category.IsActive);
+    }
+
+    [Fact(DisplayName = nameof(Deactivate))]
+    [Trait("Domain", "Category - Aggregates")]
+    public void Deactivate()
+    {
+        var validDate = new
+        {
+            Name = "category name",
+            Description = "category description"
+        };
+
+        var category = new DomainEntity.Category(validDate.Name, validDate.Description, true);
+        category.Deactivate();
+
+        Assert.False(category.IsActive);
     }
 
     [Theory(DisplayName = nameof(InstantiateErrorWhenNameIsEmpty))]
