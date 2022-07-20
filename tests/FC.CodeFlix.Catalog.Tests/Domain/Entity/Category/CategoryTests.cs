@@ -167,16 +167,12 @@ public class CategoryTests
 
         var category = new DomainEntity.Category(validCategory.Name, validCategory.Description);
 
-        var categoryNewDate = new
-        {
-            Name = "new category name",
-            Description = "new category description"
-        };
+        var categoryWithNewValues = _categoryTestFixture.GetValidCategory();
 
-        category.Update(categoryNewDate.Name, categoryNewDate.Description);
+        category.Update(categoryWithNewValues.Name, categoryWithNewValues.Description);
 
-        category.Name.Should().Be(categoryNewDate.Name);
-        category.Description.Should().Be(categoryNewDate.Description);
+        category.Name.Should().Be(categoryWithNewValues.Name);
+        category.Description.Should().Be(categoryWithNewValues.Description);
     }
 
     [Fact(DisplayName = nameof(UpdateOnlyName))]
@@ -187,15 +183,12 @@ public class CategoryTests
 
         var category = new DomainEntity.Category(validCategory.Name, validCategory.Description);
 
-        var categoryNewDate = new
-        {
-            Name = "new category name",
-        };
+        var categoryWithNewValues = _categoryTestFixture.GetValidCategory();
 
-        category.Update(categoryNewDate.Name);
+        category.Update(categoryWithNewValues.Name);
 
 
-        category.Name.Should().Be(categoryNewDate.Name);
+        category.Name.Should().Be(categoryWithNewValues.Name);
         category.Description.Should().Be(validCategory.Description);
     }
 
@@ -241,7 +234,7 @@ public class CategoryTests
         var validCategory = _categoryTestFixture.GetValidCategory();
 
         var category = new DomainEntity.Category(validCategory.Name, validCategory.Description);
-        var invalidName = String.Join(null, Enumerable.Range(1, 256).Select(_ => "a").ToArray());
+        var invalidName = _categoryTestFixture.Faker.Lorem.Letter(256);
 
         Action action = () => category.Update(invalidName);
 
@@ -257,7 +250,10 @@ public class CategoryTests
         var validCategory = _categoryTestFixture.GetValidCategory();
 
         var category = new DomainEntity.Category(validCategory.Name, validCategory.Description);
-        var invalidDescription = String.Join(null, Enumerable.Range(1, 10_001).Select(_ => "a").ToArray());
+        var invalidDescription = _categoryTestFixture.Faker.Commerce.ProductDescription(); ;
+
+        while (invalidDescription.Length <= 10_000)
+            invalidDescription = $"{invalidDescription}{_categoryTestFixture.Faker.Commerce.ProductDescription()}";
 
         Action action = () => category.Update(validCategory.Name, invalidDescription);
 
