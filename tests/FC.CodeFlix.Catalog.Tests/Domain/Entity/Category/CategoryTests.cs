@@ -116,8 +116,7 @@ public class CategoryTests
 
     [Theory(DisplayName = nameof(InstantiateErrorWhenNameIsLessThen3Characters))]
     [Trait("Domain", "Category - Aggregates")]
-    [InlineData("a")]
-    [InlineData("ab")]
+    [MemberData(nameof(GetNamesWithLessThen3Characters), parameters: 10)]
     public void InstantiateErrorWhenNameIsLessThen3Characters(string invalidName)
     {
         var validCategory = _categoryTestFixture.GetValidCategory();
@@ -127,6 +126,20 @@ public class CategoryTests
         action.Should()
             .Throw<EntityValidationException>()
             .WithMessage("Name should be at least 3 characters long");
+    }
+
+    public static IEnumerable<object[]> GetNamesWithLessThen3Characters(int numbersOfTests)
+    {
+        var fixture = new CategoryTestFixture();
+
+        for (int index = 0; index < numbersOfTests; index++)
+        {
+            var isOdd = index % 2 == 1;
+            yield return new object[]
+            {
+                fixture.GetValidCategoryName()[..(isOdd ? 1 : 2)]
+            };
+        }
     }
 
     [Fact(DisplayName = nameof(InstantiateErrorWhenNameIsGreaterThen255Characters))]
