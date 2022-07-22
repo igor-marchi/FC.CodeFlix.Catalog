@@ -12,17 +12,18 @@ public class DomainValidation
     public static void NotNullOrEmpty(string? target, string fieldName)
     {
         if (string.IsNullOrWhiteSpace(target))
-            throw new EntityValidationException($"{fieldName} should not be null or empty");
+            throw new EntityValidationException($"{fieldName} should not be empty or null");
     }
 
     public static void MinLenght(string target, int minLenght, string fieldName)
     {
         if (target.Length < minLenght)
-            throw new EntityValidationException($"{fieldName} should not be less than {minLenght} characters long");
+            throw new EntityValidationException($"{fieldName} should be at least {minLenght} characters long");
     }
+
     public static void MaxLenght(string target, int maxLenght, string fieldName)
     {
         if (target.Length > maxLenght)
-            throw new EntityValidationException($"{fieldName} should not be greater than {maxLenght} characters long");
+            throw new EntityValidationException($"{fieldName} should be less or equal {maxLenght} characters long");
     }
 }
