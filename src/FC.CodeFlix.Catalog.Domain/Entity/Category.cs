@@ -48,7 +48,7 @@ public class Category : AggregateRoot
 
     private void Validate()
     {
-        if (String.IsNullOrWhiteSpace(Name))
+        if (string.IsNullOrWhiteSpace(Name))
             throw new EntityValidationException($"{nameof(Name)} should not be empty or null");
 
         if (Name.Length < 3)
