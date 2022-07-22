@@ -55,13 +55,13 @@ public class Category : AggregateRoot
     private void NameValidate()
     {
         DomainValidation.NotNullOrEmpty(Name, nameof(Name));
-        DomainValidation.MinLenght(Name, 3, nameof(Name));
-        DomainValidation.MaxLenght(Name, 255, nameof(Name));
+        DomainValidation.MinLength(Name, 3, nameof(Name));
+        DomainValidation.MaxLength(Name, 255, nameof(Name));
     }
 
     private void DescriptionValidate()
     {
         DomainValidation.NotNull(Description, nameof(Description));
-        DomainValidation.MaxLenght(Description, 10_000, nameof(Description));
+        DomainValidation.MaxLength(Description, 10_000, nameof(Description));
     }
 }

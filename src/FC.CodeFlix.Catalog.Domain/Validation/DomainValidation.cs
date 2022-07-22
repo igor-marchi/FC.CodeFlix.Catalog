@@ -15,15 +15,15 @@ public class DomainValidation
             throw new EntityValidationException($"{fieldName} should not be empty or null");
     }
 
-    public static void MinLenght(string target, int minLenght, string fieldName)
+    public static void MinLength(string target, int minLength, string fieldName)
     {
-        if (target.Length < minLenght)
-            throw new EntityValidationException($"{fieldName} should be at least {minLenght} characters long");
+        if (target.Length < minLength)
+            throw new EntityValidationException($"{fieldName} should be at least {minLength} characters long");
     }
 
-    public static void MaxLenght(string target, int maxLenght, string fieldName)
+    public static void MaxLength(string target, int maxLength, string fieldName)
     {
-        if (target.Length > maxLenght)
-            throw new EntityValidationException($"{fieldName} should be less or equal {maxLenght} characters long");
+        if (target.Length > maxLength)
+            throw new EntityValidationException($"{fieldName} should be less or equal {maxLength} characters long");
     }
 }
