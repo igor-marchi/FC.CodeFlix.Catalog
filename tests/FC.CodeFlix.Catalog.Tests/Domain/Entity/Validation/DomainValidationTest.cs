@@ -4,6 +4,7 @@ using FC.CodeFlix.Catalog.Domain.Validation;
 using FluentAssertions;
 
 namespace FC.CodeFlix.Catalog.Tests.Domain.Entity.Validation;
+
 public class DomainValidationTest
 {
     private Faker Faker { get; set; } = new Faker();

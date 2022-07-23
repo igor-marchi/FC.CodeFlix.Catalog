@@ -200,7 +200,6 @@ public class CategoryTests
 
         category.Update(categoryWithNewValues.Name);
 
-
         category.Name.Should().Be(categoryWithNewValues.Name);
         category.Description.Should().Be(validCategory.Description);
     }
