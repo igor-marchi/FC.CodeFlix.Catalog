@@ -1,34 +1,33 @@
-﻿using FC.CodeFlix.Catalog.Application.Interfaces;
-using FC.CodeFlix.Catalog.Domain.Entity;
-using FC.CodeFlix.Catalog.Domain.Repository;
+﻿using FC.CodeFlix.Catalog.Domain.Entity;
 using FluentAssertions;
 using Moq;
 using UseCase = FC.CodeFlix.Catalog.Application.UseCase.Category.CreateCategory;
 
 namespace FC.CodeFlix.Catalog.Tests.Application.CreateCategory;
 
+[Collection(nameof(CreateCategoryTestFixture))]
 public class CreateCategoryTest
 {
+    private readonly CreateCategoryTestFixture _fixture;
+
+    public CreateCategoryTest(CreateCategoryTestFixture fixture)
+    {
+        _fixture = fixture;
+    }
+
     [Fact(DisplayName = nameof(CreateCategory))]
     [Trait("Application", "CreateCategory - Use Cases")]
     public async void CreateCategory()
     {
-        var repositoryMock = new Mock<ICategoryRepository>();
-        var unitOfWorkMock = new Mock<IUnitOfWork>();
-        var useCase = new UseCase.CreateCategory(repositoryMock.Object, unitOfWorkMock.Object);
+        var repositoryMock = _fixture.GetRepositoryMock();
+        var unitOfWorkMock = _fixture.GetUnitOfWork();
 
-        var categoryInputData = new
-        {
-            Name = "Category name",
-            Description = "Category description",
-            IsActive = true
-        };
-
-        var input = new UseCase.CreateCategoryInput(
-            categoryInputData.Name,
-            categoryInputData.Description,
-            categoryInputData.IsActive
+        var useCase = new UseCase.CreateCategory(
+            repositoryMock.Object,
+            unitOfWorkMock.Object
         );
+
+        var input = _fixture.GetValidCreateCategoryInput();
 
         var output = await useCase.Handle(input, CancellationToken.None);
 
@@ -48,9 +47,9 @@ public class CreateCategoryTest
         );
 
         output.Should().NotBeNull();
-        output.Name.Should().Be(categoryInputData.Name);
-        output.Description.Should().Be(categoryInputData.Description);
-        output.IsActive.Should().Be(categoryInputData.IsActive);
+        output.Name.Should().Be(input.Name);
+        output.Description.Should().Be(input.Description);
+        output.IsActive.Should().Be(input.IsActive);
         output.Id.Should().NotBeEmpty();
         output.CreatedAt.Should().NotBeSameDateAs(default(DateTime));
     }
