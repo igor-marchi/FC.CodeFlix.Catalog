@@ -8,10 +8,10 @@
 
         public bool IsActive { get; set; }
 
-        public CreateCategoryInput(string name, string? description = null, bool isActive = true)
+        public CreateCategoryInput(string name, string description = "", bool isActive = true)
         {
             Name = name;
-            Description = description ?? "";
+            Description = description;
             IsActive = isActive;
         }
     }
