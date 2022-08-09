@@ -22,19 +22,12 @@ public class CreateCategory : ICreateCategory
         var category = new DomainEntity.Category(
             createCategoryInput.Name,
             createCategoryInput.Description,
-            createCategoryInput.IsActive);
+            createCategoryInput.IsActive
+        );
 
         await _categoryRepository.Insert(category, cancellationToken);
         await _unitOfWork.Commit(cancellationToken);
 
-        var createCategoryOutput = new CreateCategoryOutput(
-            category.Id,
-            category.Name,
-            category.Description,
-            category.IsActive,
-            category.CreatedAt
-        );
-
-        return createCategoryOutput;
+        return CreateCategoryOutput.FromCategory(category);
     }
 }
