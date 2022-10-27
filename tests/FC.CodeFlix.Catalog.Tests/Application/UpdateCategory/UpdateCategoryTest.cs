@@ -1,4 +1,5 @@
 ﻿using FC.CodeFlix.Catalog.Application.UseCase.Category.Common;
+using FC.CodeFlix.Catalog.Domain.Entity;
 using FluentAssertions;
 using Moq;
 using UseCase = FC.CodeFlix.Catalog.Application.UseCase.Category.UpdateCategory;
@@ -15,23 +16,20 @@ public class UpdateCategoryTest
         _fixture = fixture;
     }
 
-    [Fact(DisplayName = nameof(UpdateCategory))]
+    [Theory(DisplayName = nameof(UpdateCategory))]
     [Trait("Application", "UpdateCategory - Use Cases")]
-    public async Task UpdateCategory()
+    [MemberData(
+        nameof(UpdateCategoryTestDataGenerator.GetCategoriesToUpdate),
+        parameters: 10,
+        MemberType = typeof(UpdateCategoryTestDataGenerator)
+    )]
+    public async Task UpdateCategory(Category category, UseCase.UpdateCategoryInput input)
     {
         var repositoryMock = _fixture.GetRepositoryMock();
         var unitOfWorkMock = _fixture.GetUnitOfWorkMock();
-        var exampleCategory = _fixture.GetExampleCategory();
         repositoryMock
-            .Setup(x => x.Get(exampleCategory.Id, It.IsAny<CancellationToken>()))
-            .ReturnsAsync(exampleCategory);
-
-        var input = new UseCase.UpdateCategoryInput(
-            exampleCategory.Id,
-            _fixture.GetValidCategoryName(),
-            _fixture.GetValidCategoryDescription(),
-            !exampleCategory.IsActive
-        );
+            .Setup(x => x.Get(category.Id, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(category);
 
         var useCase = new UseCase.UpdateCategory(
             repositoryMock.Object,
@@ -44,8 +42,8 @@ public class UpdateCategoryTest
         output.Name.Should().Be(input.Name);
         output.Description.Should().Be(input.Description);
         output.IsActive.Should().Be(input.IsActive);
-        repositoryMock.Verify(x => x.Get(exampleCategory.Id, It.IsAny<CancellationToken>()), Times.Once);
-        repositoryMock.Verify(x => x.Update(exampleCategory, It.IsAny<CancellationToken>()), Times.Once);
+        repositoryMock.Verify(x => x.Get(category.Id, It.IsAny<CancellationToken>()), Times.Once);
+        repositoryMock.Verify(x => x.Update(category, It.IsAny<CancellationToken>()), Times.Once);
         unitOfWorkMock.Verify(x => x.Commit(It.IsAny<CancellationToken>()), Times.Once);
     }
 }
