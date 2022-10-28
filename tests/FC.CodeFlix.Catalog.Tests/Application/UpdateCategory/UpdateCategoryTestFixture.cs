@@ -60,4 +60,34 @@ public class UpdateCategoryTestFixture : BaseFixture
             GetRandomBoolean()
         );
     }
+
+    public UpdateCategoryInput GetInvalidInputCategoryShortName()
+    {
+        var shortNameInvalidCategoryInput = GetValidInput();
+        shortNameInvalidCategoryInput.Name = Faker.Commerce.ProductName()[..2];
+
+        return shortNameInvalidCategoryInput;
+    }
+
+    public UpdateCategoryInput GetInvalidInputCategoryTooLongName()
+    {
+        var tooLongNameInvalidCategoryInput = GetValidInput();
+        tooLongNameInvalidCategoryInput.Name = Faker.Commerce.ProductName();
+
+        while (tooLongNameInvalidCategoryInput.Name.Length <= 255)
+            tooLongNameInvalidCategoryInput.Name = $"{tooLongNameInvalidCategoryInput.Name}{Faker.Commerce.ProductName()}";
+
+        return tooLongNameInvalidCategoryInput;
+    }
+
+    public UpdateCategoryInput GetInvalidInputCategoryTooLongDescription()
+    {
+        var tooLongDescriptionInvalidCategoryInput = GetValidInput();
+        tooLongDescriptionInvalidCategoryInput.Description = Faker.Commerce.ProductDescription();
+
+        while (tooLongDescriptionInvalidCategoryInput.Description.Length <= 10_000)
+            tooLongDescriptionInvalidCategoryInput.Description = $"{tooLongDescriptionInvalidCategoryInput.Description}{Faker.Commerce.ProductDescription()}";
+
+        return tooLongDescriptionInvalidCategoryInput;
+    }
 }
